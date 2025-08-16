@@ -1,0 +1,6 @@
+- add rest of snipcart config stuff - size, style, desc, etc
+- add click on card to see item page
+- add json/cvs/whatever support to import spreadsheet of items
+- add looping for large amounts of items
+- add Dcap CMS support manually add items
+- build out rest of site around either ship theme or ice reseller theme

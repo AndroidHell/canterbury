@@ -1,0 +1,19 @@
+---
+import Containter from "../components/Container.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SectionHead from "../components/PageBanner.astro";
+import StoreComponent from "../components/Store.astro";
+import CtaBanner from "../components/CtaBanner.astro";
+
+const title = "Web Store";
+const desc = "";
+const image = "/hero-inner.webp";
+---
+
+<BaseLayout title="Web Store" description="Web Store">
+  <SectionHead title={title} desc={desc} image={image} />
+  <Containter>
+    <StoreComponent />
+  </Containter>
+  <CtaBanner />
+</BaseLayout>
