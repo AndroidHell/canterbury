@@ -1,0 +1,58 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Container from "../../components/Container.astro";
+import HeroInner from "../../components/PageBanner.astro";
+import type { GetStaticPaths } from "astro";
+import type { Product } from "../../lib/getProducts";
+import { getProducts } from "../../lib/getProducts";
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const products: Product[] = await getProducts();
+  return products.map((p) => ({
+    params: { slug: p.slug }, // <-- single string, not array
+  }));
+};
+
+const { slug } = Astro.params;
+const products: Product[] = await getProducts();
+const product = products.find((p) => p.slug === slug)!;
+
+const title = "Our store";
+const desc = "";
+const image = "/hero-inner.webp";
+---
+
+<BaseLayout title="Our Store">
+  <!-- <HeroInner title={title} desc={desc} image={image} /> -->
+
+  <Container>
+    <article class="mx-auto mt-10 max-w-2xl p-6">
+      <h1 class="mb-4 text-3xl font-bold">{product.title}</h1>
+      <img
+        src={product.image}
+        alt={product.title}
+        class="mb-4 w-full rounded"
+      />
+      <p class="mb-2">{product.description}</p>
+      <p class="mb-4 font-semibold">${product.price}</p>
+
+      <button
+        class="snipcart-add-item w-full rounded bg-blue-600 px-4 py-2 font-bold text-white hover:bg-blue-700"
+        data-item-id={product.slug}
+        data-item-price={product.price}
+        data-item-url={`/store/${product.slug}`}
+        data-item-name={product.title}
+        data-item-description={product.description}
+        data-item-image={product.image}
+        data-item-custom1-name="Frame color"
+        data-item-custom1-options="Black|Brown|Gold"
+      >
+        Add to cart
+      </button>
+
+      <a href="/store" class="mt-4 block text-blue-600 hover:underline"
+        >← Back to Store</a
+      >
+    </article>
+  </Container>
+</BaseLayout>

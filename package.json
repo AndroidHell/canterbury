@@ -34,6 +34,7 @@
     "@fontsource/happy-monkey": "^5.0.13",
     "@fontsource/poppins": "^5.0.14",
     "@philnash/astro-pagination": "^0.4.0",
+    "csv-parse": "^6.1.0",
     "decap-cms-app": "^3.1.11",
     "flowbite": "^2.3.0",
     "sharp": "^0.33.1",
