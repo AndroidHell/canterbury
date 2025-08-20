@@ -1,5 +1,4 @@
 ---
-// src/pages/store/[...page].astro
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Container from "../../components/Container.astro";
 import HeroInner from "../../components/PageBanner.astro";
@@ -16,7 +15,7 @@ interface PageProps {
 
 export async function getStaticPaths({ paginate }: { paginate: any }) {
   const products = await getProducts();
-  return paginate(products, { pageSize: 1 }); // I bumped to 6 per page (adjust if needed)
+  return paginate(products, { pageSize: 6});
 }
 
 const { page }: { page: PageProps } = Astro.props;
@@ -29,58 +28,76 @@ const image = "/hero-inner.webp";
 <BaseLayout title={title}>
   <HeroInner title={title} desc={desc} image={image} />
 
-  <Container>
+  <Container class="mt-10">
     <!-- Products grid -->
-    <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {
-        page.data.map((p) => (
-          <a
-            href={`/store/${p.slug}`}
-            class="rounded border p-4 hover:shadow-lg"
-          >
-            <img
-              src={p.image}
-              alt={p.title}
-              class="h-48 w-full rounded object-cover"
-            />
-            <h2 class="mt-2 text-lg font-bold">{p.title}</h2>
-            <p class="font-semibold text-gray-700">${p.price}</p>
-          </a>
-        ))
-      }
+    <div class="relative grid grid-cols-1 gap-6 p-6 md:grid-cols-2 lg:grid-cols-3">
+      {page.data.map((p) => (
+     <a
+  href={`/store/${p.slug}`}
+  class="relative max-w-sm overflow-hidden rounded bg-white shadow-lg dark:bg-gray-900 hover:shadow-xl transition-shadow duration-200 flex flex-col"
+>
+  <!-- Product Image -->
+  <img class="h-64 w-full object-cover" src={p.image} alt={p.title} />
+
+  <!-- Product Info -->
+  <div class="p-4 flex flex-col flex-1">
+    <h2 class="mb-2 text-xl font-bold text-gray-900 dark:text-gray-100">{p.title}</h2>
+    <p class="mb-4 text-sm text-gray-700 dark:text-gray-300">{p.description}</p>
+    <p class="mb-4 font-semibold text-gray-900 dark:text-gray-100">${p.price}</p>
+
+    <!-- Snipcart Add to Cart Button at bottom -->
+    <button
+      class="snipcart-add-item w-full rounded bg-blue-600 px-4 py-2 font-bold text-white hover:bg-blue-700 mt-auto"
+      data-item-id={p.slug}
+      data-item-price={p.price}
+      data-item-url={`/store/${p.slug}`}
+      data-item-name={p.title}
+      data-item-description={p.description}
+      data-item-image={p.image}
+      data-item-custom1-name="Frame color"
+      data-item-custom1-options="Black|Brown|Gold"
+    >
+      Quick add
+    </button>
+  </div>
+</a>
+      ))}
     </div>
 
     <!-- Flowbite Pagination -->
-    <div class="mt-8 flex justify-center">
-      <nav aria-label="Page navigation example">
-        <ul class="inline-flex h-10 -space-x-px text-base">
-          {
-            page.url.prev ? (
-              <li>
-                <a
-                  href={page.url.prev}
-                  class="ms-0 flex h-10 items-center justify-center rounded-s-lg border border-e-0 border-gray-300 bg-white px-4 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-                >
-                  Previous
-                </a>
-              </li>
-            ) : null
-          }
+<div class="mt-8 flex justify-center">
+  <nav aria-label="Page navigation example">
+    <ul class="inline-flex h-10 -space-x-px text-base">
+      <!-- Previous button -->
+      <li>
+        <a
+          href={page.url.prev ?? "#"}
+          class={`ms-0 flex h-10 items-center justify-center rounded-s-lg border border-gray-300 dark:border-gray-700 px-4 leading-tight text-base 
+            ${page.url.prev
+              ? "bg-white text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+              : "bg-gray-200 text-gray-400 dark:bg-gray-800 dark:text-gray-600 pointer-events-none"
+            }`}
+        >
+          Previous
+        </a>
+      </li>
 
-          {
-            page.url.next ? (
-              <li>
-                <a
-                  href={page.url.next}
-                  class="flex h-10 items-center justify-center rounded-e-lg border border-gray-300 bg-white px-4 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-                >
-                  Next
-                </a>
-              </li>
-            ) : null
-          }
-        </ul>
-      </nav>
-    </div>
+      <!-- Next button -->
+      <li>
+        <a
+          href={page.url.next ?? "#"}
+          class={`flex h-10 items-center justify-center rounded-e-lg border border-gray-300 dark:border-gray-700 px-4 leading-tight text-base
+            ${page.url.next
+              ? "bg-white text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+              : "bg-gray-200 text-gray-400 dark:bg-gray-800 dark:text-gray-600 pointer-events-none"
+            }`}
+        >
+          Next
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>
+
   </Container>
 </BaseLayout>
